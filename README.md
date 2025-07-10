@@ -78,9 +78,11 @@ cd aws-deployment
 
 **예상 비용**: 월 $5-10 (프리 티어 사용 시 거의 무료)
 
-## 🔧 Spring Boot와 연결하기 (고급)
+## 🔧 Spring Boot 펫클리닉과 연결하기 (고급)
 
-백엔드 서버와 연결해서 실제 데이터를 관리할 수 있습니다.
+실제 동물병원 관리 시스템과 연결해서 완전한 3-Tier 아키텍처를 구축할 수 있습니다.
+
+### 🚀 빠른 로컬 테스트
 
 ```bash
 # 1. Spring Boot 펫클리닉 다운로드 & 실행
@@ -91,6 +93,23 @@ cd spring-petclinic
 # 2. 연동 확인
 # 브라우저에서 templates/demo.html 열기
 ```
+
+### ☁️ AWS 완전 배포
+
+**공식 Spring Boot 펫클리닉**: https://github.com/spring-projects/spring-petclinic
+
+```bash
+# AWS에서 완전한 3-Tier 구조 배포
+# 자세한 내용은 아래 가이드 참조:
+```
+
+**사용 가능한 API 엔드포인트:**
+- `GET /api/owners` - 보호자 목록
+- `GET /api/pets` - 반려동물 목록  
+- `GET /api/vets` - 수의사 목록
+- `GET /api/visits` - 진료 기록
+- `POST /api/owners` - 새 보호자 등록
+- `POST /api/pets` - 새 반려동물 등록
 
 ## 📁 프로젝트 구조 (간단히)
 
@@ -156,14 +175,15 @@ A: [Issues](https://github.com/ryong-git/petclinic-web/issues)에 올려주시�
 ## 🏗️ 3-Tier 아키텍처란?
 
 ```
-👥 사용자
-   ↓
-🌐 웹 계층 (S3 + CloudFront)     ← 웹사이트 제공
-   ↓  
-💻 앱 계층 (EC2 + ALB)           ← 비즈니스 로직
-   ↓
-💾 데이터 계층 (RDS + S3)        ← 데이터 저장
+👥 사용자 → 🌐 도메인(Route 53) → ☁️ CloudFront → ⚖️ WEB ALB → 🖥️ WEB (EC2/Nginx) 
+                                                     ↓
+                                                ⚖️ WAS ALB → 💻 WAS (Petclinic) → 💾 RDS
 ```
+
+**완전한 3-Tier 구조:**
+- **Presentation Tier**: CloudFront + WEB ALB + EC2 (Nginx) - 정적 파일 서빙
+- **Application Tier**: WAS ALB + EC2 (Spring Boot) - 비즈니스 로직 처리  
+- **Data Tier**: RDS (MySQL/PostgreSQL) - 데이터 저장 및 관리
 
 **왜 3-Tier인가요?**
 - 각 계층을 독립적으로 확장 가능
