@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">펫클리닉 관리 대시보드 - 행복한 동물병원</title>
+    <meta name="description" content="실제 펫클리닉 데이터를 시각화하고 관리하는 대시보드">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="../assets/css/main.css" rel="stylesheet">
+    
+    <style>
+        .dashboard-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: transform 0.2s ease;
+        }
+        
+        .dashboard-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+        
+        .stat-card {
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2E8B57;
+            display: block;
+        }
+        
+        .stat-label {
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+        
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .status-online {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-offline {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .status-mock {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .api-status {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 1000;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-weight: 500;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .data-table {
+            font-size: 0.9rem;
+        }
+        
+        .data-table th {
+            background: #f8f9fa;
+            border: none;
+            font-weight: 600;
+            color: #495057;
+        }
+        
+        .data-table td {
+            border: none;
+            border-bottom: 1px solid #e9ecef;
+            vertical-align: middle;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin: 1rem 0;
+        }
+        
+        .action-btn {
+            padding: 0.375rem 0.75rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            margin: 0 0.2rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-edit {
+            background: #007bff;
+            color: white;
+        }
+        
+        .btn-edit:hover {
+            background: #0056b3;
+        }
+        
+        .btn-delete {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn-delete:hover {
+            background: #c82333;
+        }
+        
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .alert-demo {
+            border-left: 4px solid #007bff;
+            background: #f8f9ff;
+        }
+        
+        .pet-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #e9ecef;
+        }
+    </style>
+</head>
+<body>
+    <!-- API 연결 상태 -->
+    <div id="api-status" class="api-status">
+        <i class="fas fa-circle me-2"></i>
+        <span id="api-status-text">연결 확인 중...</span>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="container">
+                <a class="navbar-brand" href="../index.html">
+                    <img id="clinic-logo" src="../assets/images/clinic/logo.png" alt="로고" class="logo">
+                    <span id="clinic-name">행복한 동물병원</span>
+                </a>
+                
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="../index.html">홈</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="about.html">병원소개</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="services.html">진료안내</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="contact.html">연락처</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="demo.html">API 데모</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="petclinic-dashboard.html">대시보드</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container py-5">
+            <div class="row">
+                <div class="col-12">
+                    <div class="alert alert-demo" role="alert">
+                        <h4 class="alert-heading">
+                            <i class="fas fa-chart-line me-2"></i>
+                            펫클리닉 관리 대시보드
+                        </h4>
+                        <p class="mb-2">
+                            실제 Spring Boot 펫클리닉과 연동하여 동물병원 데이터를 시각화하고 관리하는 대시보드입니다.
+                        </p>
+                        <hr>
+                        <p class="mb-0">
+                            <strong>📊 실시간 데이터:</strong> 보호자, 반려동물, 수의사, 진료 기록을 실시간으로 확인하고 관리할 수 있습니다.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 통계 카드 -->
+            <div class="row mb-4">
+                <div class="col-md-3 col-sm-6">
+                    <div class="dashboard-card stat-card">
+                        <i class="fas fa-users fa-2x text-primary mb-3"></i>
+                        <span id="total-owners" class="stat-number">-</span>
+                        <div class="stat-label">등록된 보호자</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="dashboard-card stat-card">
+                        <i class="fas fa-paw fa-2x text-success mb-3"></i>
+                        <span id="total-pets" class="stat-number">-</span>
+                        <div class="stat-label">등록된 반려동물</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="dashboard-card stat-card">
+                        <i class="fas fa-user-md fa-2x text-info mb-3"></i>
+                        <span id="total-vets" class="stat-number">-</span>
+                        <div class="stat-label">근무 중인 수의사</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="dashboard-card stat-card">
+                        <i class="fas fa-calendar-check fa-2x text-warning mb-3"></i>
+                        <span id="total-visits" class="stat-number">-</span>
+                        <div class="stat-label">진료 기록</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 차트 섹션 -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="dashboard-card">
+                        <h5 class="mb-3">
+                            <i class="fas fa-chart-pie me-2"></i>
+                            반려동물 종류별 분포
+                        </h5>
+                        <div class="chart-container">
+                            <canvas id="petTypesChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="dashboard-card">
+                        <h5 class="mb-3">
+                            <i class="fas fa-chart-bar me-2"></i>
+                            월별 진료 건수
+                        </h5>
+                        <div class="chart-container">
+                            <canvas id="monthlyVisitsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 데이터 테이블 -->
+            <div class="row">
+                <!-- 최근 보호자 -->
+                <div class="col-md-6 mb-4">
+                    <div class="dashboard-card">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="mb-0">
+                                <i class="fas fa-users me-2"></i>
+                                최근 등록 보호자
+                            </h5>
+                            <button class="btn btn-sm btn-outline-primary" onclick="refreshOwners()">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                        </div>
+                        <div id="owners-loading" class="loading-spinner">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">로딩중...</span>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table data-table">
+                                <thead>
+                                    <tr>
+                                        <th>이름</th>
+                                        <th>연락처</th>
+                                        <th>주소</th>
+                                        <th>관리</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="owners-table-body">
+                                    <!-- 동적 생성 -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 최근 반려동물 -->
+                <div class="col-md-6 mb-4">
+                    <div class="dashboard-card">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="mb-0">
+                                <i class="fas fa-paw me-2"></i>
+                                최근 등록 반려동물
+                            </h5>
+                            <button class="btn btn-sm btn-outline-success" onclick="refreshPets()">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                        </div>
+                        <div id="pets-loading" class="loading-spinner">
+                            <div class="spinner-border text-success" role="status">
+                                <span class="visually-hidden">로딩중...</span>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table data-table">
+                                <thead>
+                                    <tr>
+                                        <th>사진</th>
+                                        <th>이름</th>
+                                        <th>종류</th>
+                                        <th>나이</th>
+                                        <th>관리</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="pets-table-body">
+                                    <!-- 동적 생성 -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 수의사 정보 -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="dashboard-card">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="mb-0">
+                                <i class="fas fa-user-md me-2"></i>
+                                수의사 정보
+                            </h5>
+                            <button class="btn btn-sm btn-outline-info" onclick="refreshVets()">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                        </div>
+                        <div id="vets-loading" class="loading-spinner">
+                            <div class="spinner-border text-info" role="status">
+                                <span class="visually-hidden">로딩중...</span>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table data-table">
+                                <thead>
+                                    <tr>
+                                        <th>이름</th>
+                                        <th>전문 분야</th>
+                                        <th>근무 상태</th>
+                                        <th>등록일</th>
+                                        <th>관리</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="vets-table-body">
+                                    <!-- 동적 생성 -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="text-center">
+                <p>&copy; 2024 <span id="footer-clinic-name">행복한 동물병원</span>. 모든 권리 보유.</p>
+                <p class="text-muted">AWS 3-Tier 아키텍처 학습용 프로젝트</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- API Client -->
+    <script src="../assets/js/api-client.js"></script>
+    
+    <!-- Dashboard Logic -->
+    <script>
+        let apiClient;
+        let petTypesChart;
+        let monthlyVisitsChart;
+
+        // 페이지 로드 시 초기화
+        document.addEventListener('DOMContentLoaded', async function() {
+            try {
+                // API 클라이언트 초기화
+                apiClient = new PetclinicAPIClient();
+                await apiClient.loadConfig();
+                
+                // 설정 적용
+                await loadSiteConfig();
+                
+                // 대시보드 데이터 로드
+                await initializeDashboard();
+                
+                // 차트 초기화
+                initializeCharts();
+                
+                // 주기적 업데이트 (30초마다)
+                setInterval(updateDashboard, 30000);
+                
+            } catch (error) {
+                console.error('대시보드 초기화 중 오류:', error);
+                updateAPIStatus('offline', '초기화 실패');
+            }
+        });
+
+        // 사이트 설정 로드
+        async function loadSiteConfig() {
+            try {
+                const response = await fetch('../config/clinic-info.json');
+                const config = await response.json();
+                
+                // 클리닉 이름 업데이트
+                const clinicName = config.clinic.name;
+                document.getElementById('clinic-name').textContent = clinicName;
+                document.getElementById('footer-clinic-name').textContent = clinicName;
+                document.getElementById('page-title').textContent = `펫클리닉 관리 대시보드 - ${clinicName}`;
+                
+            } catch (error) {
+                console.error('설정 로드 실패:', error);
+            }
+        }
+
+        // 대시보드 초기화
+        async function initializeDashboard() {
+            try {
+                // API 연결 상태 확인
+                const isConnected = await apiClient.testConnection();
+                
+                if (isConnected) {
+                    updateAPIStatus('online', 'Spring Boot 연결됨');
+                    await loadRealData();
+                } else {
+                    updateAPIStatus('mock', 'Mock 데이터 사용');
+                    await loadMockData();
+                }
+                
+            } catch (error) {
+                console.error('대시보드 초기화 오류:', error);
+                updateAPIStatus('offline', '연결 실패');
+                await loadMockData();
+            }
+        }
+
+        // 실제 데이터 로드
+        async function loadRealData() {
+            try {
+                // 모든 데이터 병렬 로드
+                const [owners, pets, vets] = await Promise.all([
+                    apiClient.getOwners(),
+                    apiClient.getPets(),
+                    apiClient.getVeterinarians()
+                ]);
+
+                // 통계 업데이트
+                updateStatistics(owners, pets, vets);
+                
+                // 테이블 업데이트
+                updateOwnersTable(owners);
+                updatePetsTable(pets);
+                updateVetsTable(vets);
+                
+                // 차트 업데이트
+                updateCharts(pets);
+                
+            } catch (error) {
+                console.error('실제 데이터 로드 실패:', error);
+                await loadMockData();
+            }
+        }
+
+        // Mock 데이터 로드
+        async function loadMockData() {
+            const mockOwners = [
+                { id: 1, firstName: '홍', lastName: '길동', address: '서울시 강남구', city: '서울', telephone: '010-1234-5678' },
+                { id: 2, firstName: '김', lastName: '영희', address: '부산시 해운대구', city: '부산', telephone: '010-8765-4321' },
+                { id: 3, firstName: '박', lastName: '철수', address: '대구시 수성구', city: '대구', telephone: '010-5555-6666' }
+            ];
+
+            const mockPets = [
+                { id: 1, name: '바둑이', type: { name: '강아지' }, birthDate: '2020-05-15', owner: { firstName: '홍', lastName: '길동' } },
+                { id: 2, name: '나비', type: { name: '고양이' }, birthDate: '2019-08-20', owner: { firstName: '김', lastName: '영희' } },
+                { id: 3, name: '초코', type: { name: '강아지' }, birthDate: '2021-03-10', owner: { firstName: '박', lastName: '철수' } },
+                { id: 4, name: '루비', type: { name: '고양이' }, birthDate: '2020-12-05', owner: { firstName: '홍', lastName: '길동' } }
+            ];
+
+            const mockVets = [
+                { id: 1, firstName: '김', lastName: '수의', specialties: [{ name: '내과' }, { name: '피부과' }] },
+                { id: 2, firstName: '이', lastName: '동물', specialties: [{ name: '외과' }, { name: '정형외과' }] },
+                { id: 3, firstName: '박', lastName: '펫닥터', specialties: [{ name: '치과' }] }
+            ];
+
+            updateStatistics(mockOwners, mockPets, mockVets);
+            updateOwnersTable(mockOwners);
+            updatePetsTable(mockPets);
+            updateVetsTable(mockVets);
+            updateCharts(mockPets);
+        }
+
+        // API 상태 업데이트
+        function updateAPIStatus(status, message) {
+            const statusElement = document.getElementById('api-status');
+            const textElement = document.getElementById('api-status-text');
+            
+            statusElement.className = `api-status status-${status}`;
+            textElement.textContent = message;
+        }
+
+        // 통계 업데이트
+        function updateStatistics(owners, pets, vets) {
+            document.getElementById('total-owners').textContent = owners.length;
+            document.getElementById('total-pets').textContent = pets.length;
+            document.getElementById('total-vets').textContent = vets.length;
+            document.getElementById('total-visits').textContent = Math.floor(Math.random() * 50) + 20; // Mock 진료 기록
+        }
+
+        // 보호자 테이블 업데이트
+        function updateOwnersTable(owners) {
+            const tbody = document.getElementById('owners-table-body');
+            tbody.innerHTML = '';
+            
+            owners.slice(0, 5).forEach(owner => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${owner.firstName} ${owner.lastName}</td>
+                    <td>${owner.telephone || 'N/A'}</td>
+                    <td>${owner.address || owner.city || 'N/A'}</td>
+                    <td>
+                        <button class="action-btn btn-edit" onclick="editOwner(${owner.id})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn btn-delete" onclick="deleteOwner(${owner.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // 반려동물 테이블 업데이트
+        function updatePetsTable(pets) {
+            const tbody = document.getElementById('pets-table-body');
+            tbody.innerHTML = '';
+            
+            pets.slice(0, 5).forEach(pet => {
+                const age = calculateAge(pet.birthDate);
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>
+                        <img src="../assets/images/pets/default-${pet.type?.name === '고양이' ? 'cat' : 'dog'}.jpg" 
+                             alt="${pet.name}" class="pet-avatar"
+                             onerror="this.src='../assets/images/pets/default-pet.jpg'">
+                    </td>
+                    <td>${pet.name}</td>
+                    <td>${pet.type?.name || 'Unknown'}</td>
+                    <td>${age}</td>
+                    <td>
+                        <button class="action-btn btn-edit" onclick="editPet(${pet.id})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn btn-delete" onclick="deletePet(${pet.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // 수의사 테이블 업데이트
+        function updateVetsTable(vets) {
+            const tbody = document.getElementById('vets-table-body');
+            tbody.innerHTML = '';
+            
+            vets.forEach(vet => {
+                const specialties = vet.specialties?.map(s => s.name).join(', ') || '일반진료';
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>Dr. ${vet.firstName} ${vet.lastName}</td>
+                    <td>${specialties}</td>
+                    <td><span class="status-badge status-online">근무중</span></td>
+                    <td>${new Date().toLocaleDateString()}</td>
+                    <td>
+                        <button class="action-btn btn-edit" onclick="editVet(${vet.id})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // 차트 초기화
+        function initializeCharts() {
+            // 반려동물 종류별 파이 차트
+            const petTypesCtx = document.getElementById('petTypesChart').getContext('2d');
+            petTypesChart = new Chart(petTypesCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['강아지', '고양이', '기타'],
+                    datasets: [{
+                        data: [0, 0, 0],
+                        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+
+            // 월별 진료 건수 바 차트
+            const monthlyVisitsCtx = document.getElementById('monthlyVisitsChart').getContext('2d');
+            monthlyVisitsChart = new Chart(monthlyVisitsCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['1월', '2월', '3월', '4월', '5월', '6월'],
+                    datasets: [{
+                        label: '진료 건수',
+                        data: [],
+                        backgroundColor: '#2E8B57',
+                        borderRadius: 4,
+                        borderSkipped: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // 차트 데이터 업데이트
+        function updateCharts(pets) {
+            // 펫 종류별 데이터 계산
+            const petTypeCounts = pets.reduce((acc, pet) => {
+                const type = pet.type?.name || '기타';
+                acc[type] = (acc[type] || 0) + 1;
+                return acc;
+            }, {});
+
+            // 파이 차트 업데이트
+            const dogCount = petTypeCounts['강아지'] || 0;
+            const catCount = petTypeCounts['고양이'] || 0;
+            const otherCount = petTypeCounts['기타'] || 0;
+            
+            petTypesChart.data.datasets[0].data = [dogCount, catCount, otherCount];
+            petTypesChart.update();
+
+            // 월별 진료 건수 (Mock 데이터)
+            const monthlyData = Array.from({length: 6}, () => Math.floor(Math.random() * 30) + 10);
+            monthlyVisitsChart.data.datasets[0].data = monthlyData;
+            monthlyVisitsChart.update();
+        }
+
+        // 나이 계산 함수
+        function calculateAge(birthDate) {
+            if (!birthDate) return 'N/A';
+            const birth = new Date(birthDate);
+            const today = new Date();
+            const ageInMonths = (today.getFullYear() - birth.getFullYear()) * 12 + (today.getMonth() - birth.getMonth());
+            
+            if (ageInMonths < 12) {
+                return `${ageInMonths}개월`;
+            } else {
+                const years = Math.floor(ageInMonths / 12);
+                const months = ageInMonths % 12;
+                return months > 0 ? `${years}년 ${months}개월` : `${years}년`;
+            }
+        }
+
+        // 새로고침 함수들
+        async function refreshOwners() {
+            document.getElementById('owners-loading').style.display = 'block';
+            try {
+                const owners = await apiClient.getOwners();
+                updateOwnersTable(owners);
+            } catch (error) {
+                console.error('보호자 데이터 새로고침 실패:', error);
+            } finally {
+                document.getElementById('owners-loading').style.display = 'none';
+            }
+        }
+
+        async function refreshPets() {
+            document.getElementById('pets-loading').style.display = 'block';
+            try {
+                const pets = await apiClient.getPets();
+                updatePetsTable(pets);
+                updateCharts(pets);
+            } catch (error) {
+                console.error('반려동물 데이터 새로고침 실패:', error);
+            } finally {
+                document.getElementById('pets-loading').style.display = 'none';
+            }
+        }
+
+        async function refreshVets() {
+            document.getElementById('vets-loading').style.display = 'block';
+            try {
+                const vets = await apiClient.getVeterinarians();
+                updateVetsTable(vets);
+            } catch (error) {
+                console.error('수의사 데이터 새로고침 실패:', error);
+            } finally {
+                document.getElementById('vets-loading').style.display = 'none';
+            }
+        }
+
+        // 대시보드 전체 업데이트
+        async function updateDashboard() {
+            try {
+                await initializeDashboard();
+            } catch (error) {
+                console.error('대시보드 업데이트 실패:', error);
+            }
+        }
+
+        // CRUD 액션 함수들 (데모용)
+        function editOwner(id) {
+            alert(`보호자 ID ${id} 편집 기능 (구현 예정)`);
+        }
+
+        function deleteOwner(id) {
+            if (confirm('정말로 이 보호자를 삭제하시겠습니까?')) {
+                alert(`보호자 ID ${id} 삭제 기능 (구현 예정)`);
+            }
+        }
+
+        function editPet(id) {
+            alert(`반려동물 ID ${id} 편집 기능 (구현 예정)`);
+        }
+
+        function deletePet(id) {
+            if (confirm('정말로 이 반려동물을 삭제하시겠습니까?')) {
+                alert(`반려동물 ID ${id} 삭제 기능 (구현 예정)`);
+            }
+        }
+
+        function editVet(id) {
+            alert(`수의사 ID ${id} 편집 기능 (구현 예정)`);
+        }
+    </script>
+</body>
+</html>

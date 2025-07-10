@@ -185,6 +185,7 @@ A: [Issues](https://github.com/ryong-git/petclinic-web/issues)에 올려주시�
 - [🏗️ AWS EC2 + Nginx + ALB 가이드](docs/aws-ec2-nginx-guide.md) - **완전한 3-Tier 아키텍처**
 - [🚀 자동 배포 스크립트](scripts/deploy-full-stack.sh) - **원클릭 인프라 구축**
 - [🔗 Spring Boot 펫클리닉 연동](https://github.com/spring-projects/spring-petclinic) - **실제 백엔드 연결**
+- [📊 펫클리닉 대시보드](templates/petclinic-dashboard.html) - **실시간 데이터 시각화**
 
 ## 📋 새로운 기능들
 
@@ -211,6 +212,7 @@ git clone https://github.com/spring-projects/spring-petclinic.git
 - **반려동물 등록** - 펫 정보 관리
 - **수의사 예약** - 진료 스케줄링  
 - **진료 기록** - 의료 데이터 관리
+- **📊 실시간 대시보드** - 통계 차트 및 데이터 시각화
 
 ### 🛠️ 자동화 도구들
 - **`scripts/deploy-full-stack.sh`** - AWS 인프라 자동 구축
