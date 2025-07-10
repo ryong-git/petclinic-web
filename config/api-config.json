@@ -1,0 +1,55 @@
+{
+  "api": {
+    "baseUrl": "http://localhost:8080",
+    "endpoints": {
+      "owners": "/api/owners",
+      "pets": "/api/pets", 
+      "vets": "/api/vets",
+      "visits": "/api/visits",
+      "specialties": "/api/specialties",
+      "petTypes": "/api/pettypes"
+    },
+    "timeout": 5000,
+    "retryAttempts": 3,
+    "headers": {
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    }
+  },
+  "environment": {
+    "development": {
+      "baseUrl": "http://localhost:8080",
+      "enableMocks": true,
+      "debugMode": true
+    },
+    "staging": {
+      "baseUrl": "https://staging-api.your-domain.com",
+      "enableMocks": false,
+      "debugMode": true
+    },
+    "production": {
+      "baseUrl": "https://api.your-domain.com",
+      "enableMocks": false,
+      "debugMode": false
+    }
+  },
+  "features": {
+    "enableRealTimeData": true,
+    "enableOwnerRegistration": true,
+    "enablePetRegistration": true,
+    "enableAppointments": true,
+    "enableVisitHistory": true,
+    "enableVetSchedules": true,
+    "autoRefreshInterval": 30000
+  },
+  "mockData": {
+    "enabled": true,
+    "responseDelay": 1000
+  },
+  "cors": {
+    "enabled": true,
+    "allowedOrigins": ["http://localhost:3000", "https://your-domain.com"],
+    "allowedMethods": ["GET", "POST", "PUT", "DELETE"],
+    "allowedHeaders": ["Content-Type", "Authorization"]
+  }
+}

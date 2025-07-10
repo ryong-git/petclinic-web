@@ -1,0 +1,123 @@
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+
+# nyc test coverage
+.nyc_output
+
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# Optional npm cache directory
+.npm
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# dotenv environment variables file
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Temporary folders
+tmp/
+temp/
+
+# AWS deployment generated files
+aws-deployment/deploy-exclude.txt
+aws-deployment/website-config.json
+aws-deployment/bucket-policy.json
+aws-deployment/cloudfront-config.json
+
+# Local AWS config (contains sensitive information)
+config/aws-config.local.json
+
+# Backup files
+*.bak
+*.backup
+*.old
+
+# Build outputs
+dist/
+build/
+
+# Cache files
+.cache/
+
+# Local development files
+local/
+dev/
+
+# Test files (if any)
+test-results/
+
+# Documentation build files
+docs/_build/
+docs/.doctrees/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Python cache files (if any Python tools are used)
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Compressed files
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# Actual image files (keep placeholder structure but ignore real images)
+# Comment out these lines if you want to track actual images
+# assets/images/clinic/*.jpg
+# assets/images/clinic/*.png
+# assets/images/vets/*.jpg
+# assets/images/services/*.jpg
+
+# Keep placeholder files
+!assets/images/clinic/.gitkeep
+!assets/images/vets/.gitkeep
+!assets/images/services/.gitkeep

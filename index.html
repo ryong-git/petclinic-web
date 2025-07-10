@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">행복한 동물병원</title>
+    <meta name="description" content="신뢰할 수 있는 동물병원, 우리 가족처럼 소중하게">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="./assets/css/main.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Emergency Banner -->
+    <div id="emergency-banner" class="emergency-banner d-none">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <i class="fas fa-phone-alt me-2"></i>
+                    <span>응급상황 시 24시간 연락 가능:</span>
+                    <strong id="emergency-phone"></strong>
+                </div>
+                <div class="col-md-4 text-end">
+                    <button class="btn btn-sm btn-light" onclick="closeEmergencyBanner()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="container">
+                <a class="navbar-brand" href="index.html">
+                    <img id="clinic-logo" src="./assets/images/clinic/logo.png" alt="로고" class="logo">
+                    <span id="clinic-name">행복한 동물병원</span>
+                </a>
+                
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="index.html">홈</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="templates/about.html">병원소개</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="templates/services.html">진료안내</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="templates/contact.html">오시는길</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="templates/demo.html">API 데모</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-image">
+            <img id="hero-image" src="./assets/images/clinic/hero.jpg" alt="병원 이미지" class="img-fluid">
+            <div class="hero-overlay">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <h1 id="clinic-slogan" class="hero-title">우리 가족처럼 소중하게</h1>
+                            <p id="clinic-description" class="hero-subtitle">
+                                25년 경력의 전문 수의사가 직접 진료하는 신뢰할 수 있는 동물병원입니다.
+                            </p>
+                            <div class="hero-buttons">
+                                <a href="contact.html" class="btn btn-primary btn-lg me-3">
+                                    <i class="fas fa-map-marker-alt me-2"></i>오시는길
+                                </a>
+                                <a href="tel:" id="phone-link" class="btn btn-outline-light btn-lg">
+                                    <i class="fas fa-phone me-2"></i>전화상담
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center mb-5">
+                    <h2 class="section-title">진료 서비스</h2>
+                    <p class="section-subtitle">전문적이고 체계적인 진료 서비스를 제공합니다</p>
+                </div>
+            </div>
+            <div id="services-container" class="row">
+                <!-- Services will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Veterinarians Section -->
+    <section class="veterinarians py-5 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center mb-5">
+                    <h2 class="section-title">의료진 소개</h2>
+                    <p class="section-subtitle">경험 많은 전문 수의사가 진료합니다</p>
+                </div>
+            </div>
+            <div id="vets-container" class="row">
+                <!-- Veterinarians will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Info Section -->
+    <section class="contact-info py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <div class="contact-card text-center">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <h4>위치</h4>
+                        <p id="clinic-address">서울시 강남구 테헤란로 123</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <div class="contact-card text-center">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <h4>전화번호</h4>
+                        <p id="clinic-phone">02-1234-5678</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <div class="contact-card text-center">
+                        <div class="contact-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <h4>진료시간</h4>
+                        <div id="clinic-hours">
+                            <p>평일 09:00 - 18:00</p>
+                            <p>토요일 09:00 - 15:00</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <h5 id="footer-clinic-name">행복한 동물병원</h5>
+                    <p id="footer-clinic-address">서울시 강남구 테헤란로 123</p>
+                    <p>
+                        <i class="fas fa-phone me-2"></i>
+                        <span id="footer-clinic-phone">02-1234-5678</span>
+                    </p>
+                    <p>
+                        <i class="fas fa-envelope me-2"></i>
+                        <span id="footer-clinic-email">info@happypet.kr</span>
+                    </p>
+                </div>
+                <div class="col-lg-3">
+                    <h6>진료시간</h6>
+                    <div id="footer-clinic-hours">
+                        <p>평일: 09:00 - 18:00</p>
+                        <p>토요일: 09:00 - 15:00</p>
+                        <p>일요일: 휴진</p>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <h6>소셜미디어</h6>
+                    <div id="social-links" class="social-links">
+                        <!-- Social links will be loaded here -->
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-12 text-center">
+                    <p>&copy; 2024 <span id="copyright-clinic-name">행복한 동물병원</span>. All rights reserved.</p>
+                    <p class="small text-muted">AWS 3-Tier Architecture Demo for Educational Purpose</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="./assets/js/config-loader.js"></script>
+    <script src="./assets/js/main.js"></script>
+</body>
+</html>

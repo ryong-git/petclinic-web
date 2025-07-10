@@ -1,0 +1,44 @@
+{
+  "aws": {
+    "region": "ap-northeast-2",
+    "s3": {
+      "bucketName": "your-clinic-website-bucket",
+      "websiteEndpoint": "",
+      "indexDocument": "index.html",
+      "errorDocument": "error.html"
+    },
+    "cloudfront": {
+      "distributionId": "",
+      "domainName": "",
+      "cachePolicy": "CachingOptimized",
+      "compressionEnabled": true
+    },
+    "route53": {
+      "hostedZoneId": "",
+      "domainName": "",
+      "recordType": "A",
+      "aliasTarget": ""
+    },
+    "certificateManager": {
+      "certificateArn": "",
+      "domainName": "",
+      "validationMethod": "DNS"
+    }
+  },
+  "deployment": {
+    "syncDeleteFiles": false,
+    "excludePatterns": [
+      ".git/*",
+      "node_modules/*",
+      "*.md",
+      ".gitignore",
+      "config/aws-config.json"
+    ],
+    "includePatterns": [
+      "*.html",
+      "assets/**/*",
+      "config/clinic-info.json",
+      "config/theme-config.json"
+    ]
+  }
+}

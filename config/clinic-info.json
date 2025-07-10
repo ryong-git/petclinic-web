@@ -1,0 +1,77 @@
+{
+  "clinic": {
+    "name": "행복한 동물병원",
+    "slogan": "우리 가족처럼 소중하게",
+    "description": "25년 경력의 전문 수의사가 직접 진료하는 신뢰할 수 있는 동물병원입니다.",
+    "address": "서울시 강남구 테헤란로 123",
+    "phone": "02-1234-5678",
+    "email": "info@happypet.kr",
+    "hours": {
+      "weekday": "평일 09:00 - 18:00",
+      "saturday": "토요일 09:00 - 15:00",
+      "sunday": "일요일 휴진",
+      "holiday": "공휴일 휴진"
+    },
+    "emergencyPhone": "010-1234-5678"
+  },
+  "services": [
+    {
+      "name": "내과 진료",
+      "description": "감기, 소화기 질환, 피부병 등 일반적인 질병 진료",
+      "icon": "fa-stethoscope"
+    },
+    {
+      "name": "외과 수술",
+      "description": "중성화 수술, 종양 제거, 골절 수술 등 각종 외과적 처치",
+      "icon": "fa-cut"
+    },
+    {
+      "name": "건강검진",
+      "description": "정기적인 건강검진으로 우리 반려동물의 건강을 지켜주세요",
+      "icon": "fa-heart"
+    },
+    {
+      "name": "예방접종",
+      "description": "기본 백신부터 추가 백신까지 체계적인 예방 접종 프로그램",
+      "icon": "fa-shield-alt"
+    },
+    {
+      "name": "치과 치료",
+      "description": "스케일링, 발치 등 반려동물 구강 건강 관리",
+      "icon": "fa-tooth"
+    },
+    {
+      "name": "응급처치",
+      "description": "24시간 응급상황 대응 및 응급처치 서비스",
+      "icon": "fa-ambulance"
+    }
+  ],
+  "veterinarians": [
+    {
+      "name": "김수의사",
+      "title": "원장",
+      "specialty": "내과, 외과",
+      "experience": "25년",
+      "education": "서울대학교 수의과대학 졸업",
+      "description": "오랜 경험과 따뜻한 마음으로 반려동물을 치료합니다.",
+      "image": "vet1.jpg"
+    },
+    {
+      "name": "박수의사",
+      "title": "부원장",
+      "specialty": "피부과, 안과",
+      "experience": "15년",
+      "education": "건국대학교 수의과대학 졸업",
+      "description": "피부과 및 안과 전문 진료로 정확한 진단을 제공합니다.",
+      "image": "vet2.jpg"
+    }
+  ],
+  "facilities": [
+    "최신 디지털 X-ray 장비",
+    "초음파 진단 장비",
+    "수술실 (무균 시설)",
+    "입원실 (24시간 모니터링)",
+    "격리실 (전염병 환자용)",
+    "대기실 (강아지/고양이 분리)"
+  ]
+}

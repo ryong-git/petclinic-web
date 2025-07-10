@@ -1,0 +1,61 @@
+{
+  "theme": {
+    "name": "default",
+    "colors": {
+      "primary": "#2E8B57",
+      "secondary": "#F0F8FF",
+      "accent": "#FF6B6B",
+      "background": "#FFFFFF",
+      "text": "#333333",
+      "textLight": "#666666",
+      "border": "#E0E0E0",
+      "success": "#28A745",
+      "warning": "#FFC107",
+      "danger": "#DC3545"
+    },
+    "fonts": {
+      "primary": "'Noto Sans KR', sans-serif",
+      "heading": "'Noto Sans KR', sans-serif"
+    },
+    "layout": {
+      "maxWidth": "1200px",
+      "containerPadding": "15px",
+      "borderRadius": "8px",
+      "boxShadow": "0 2px 10px rgba(0,0,0,0.1)"
+    }
+  },
+  "images": {
+    "source": "local",
+    "basePath": "./assets/images/",
+    "s3Config": {
+      "bucket": "",
+      "region": "ap-northeast-2",
+      "basePath": ""
+    },
+    "clinic": {
+      "logo": "clinic/logo.png",
+      "hero": "clinic/hero.jpg",
+      "interior": ["clinic/interior1.jpg", "clinic/interior2.jpg", "clinic/interior3.jpg"]
+    },
+    "services": {
+      "internal": "services/internal.jpg",
+      "surgery": "services/surgery.jpg",
+      "checkup": "services/checkup.jpg",
+      "vaccination": "services/vaccination.jpg",
+      "dental": "services/dental.jpg",
+      "emergency": "services/emergency.jpg"
+    }
+  },
+  "social": {
+    "facebook": "",
+    "instagram": "",
+    "blog": "",
+    "youtube": ""
+  },
+  "features": {
+    "showEmergencyBanner": true,
+    "showSocialLinks": true,
+    "showMap": true,
+    "enableDarkMode": false
+  }
+}
