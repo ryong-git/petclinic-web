@@ -152,7 +152,7 @@ cd spring-petclinic
 1. AWS 인프라 자동 구축 (`./scripts/deploy-full-stack.sh`)
 2. Spring Boot 펫클리닉 WAS 서버 배포
 3. CloudFront + 이중 ALB + RDS 연동
-4. 실제 엔터프라이즈급 아키텍처 완성
+4. 아키텍처 완성
 
 ## ❓ 자주 묻는 질문
 
@@ -191,7 +191,7 @@ A: [Issues](https://github.com/ryong-git/petclinic-web/issues)에 올려주시�
 
 ### 🎯 완전한 3-Tier 아키텍처 구현
 ```bash
-# 실제 엔터프라이즈급 구조 배포
+# 배포
 ./scripts/deploy-full-stack.sh
 ```
 
