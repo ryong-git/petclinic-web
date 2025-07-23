@@ -155,7 +155,7 @@ sudo systemctl restart nginx
 sudo systemctl enable nginx
 ```
 
-### 5단계: 방화벽 설정
+### 5단계: 방화벽 설정 (선택사항이며, Security Group만 사용 할 것을 권장)
 
 ```bash
 # Ubuntu
